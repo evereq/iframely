@@ -83,13 +83,13 @@ app.get(CONFIG.relativeStaticUrl + '/*', function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-    res.writeHead(302, { Location: 'http://iframely.com'});
+    res.writeHead(302, { Location: 'http://www.evereq.com'});
     res.end();
 });
 
-app.listen(CONFIG.port);
+app.listen(process.env.PORT);
 
-console.log('Iframely listening on port', CONFIG.port);
+console.log('Iframely listening on port', process.env.PORT);
 console.log('- support@iframely.com - if you need help');
 console.log('- twitter.com/iframely - for news & updates');
 console.log('- github.com/itteco/iframely - star & contribute');
