@@ -1,10 +1,12 @@
 GLOBAL.CONFIG = require('./config');
 
-
 console.log("");
 console.log("Starting Iframely...");
 console.log("Base URL for embed links that require renders:", CONFIG.baseAppUrl);
 
+try {
+    var heapdump = require('heapdump');
+} catch (ex) {}
 
 var path = require('path');
 var express = require('express');
@@ -74,7 +76,11 @@ function errorHandler(err, req, res, next) {
 }
 
 process.on('uncaughtException', function(err) {
-    console.log(err.stack);
+    if (CONFIG.DEBUG) {
+        console.log(err.stack);
+    } else {
+        console.log(err.message);
+    }
 });
 
 app.get(CONFIG.relativeStaticUrl + '/*', function(req, res, next) {
@@ -89,7 +95,12 @@ app.get('/', function(req, res) {
 
 app.listen(process.env.PORT);
 
-console.log('Iframely listening on port', process.env.PORT);
+if (CONFIG.ssl) {
+    var options = { key: CONFIG.ssl.key, cert: CONFIG.ssl.cert };
+    require('https').createServer(options, app).listen(CONFIG.ssl.port);
+}
+
+console.log('Iframely listening on port', CONFIG.port);
 console.log('- support@iframely.com - if you need help');
 console.log('- twitter.com/iframely - for news & updates');
 console.log('- github.com/itteco/iframely - star & contribute');
